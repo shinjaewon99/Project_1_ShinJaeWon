@@ -59,6 +59,7 @@ public class JwtService {
         return extractClaim(token, Claims::getExpiration);
     }
 
+    // Claims: jwt에 담기는 정보의 단위 (Map 객체), 사용자 정보와 유효기간을 포함하여 jwt 토큰 생성
     private Claims extractAllClaims(String token) {
         return Jwts
                 .parserBuilder()
