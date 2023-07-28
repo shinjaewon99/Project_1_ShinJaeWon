@@ -1,6 +1,7 @@
 package com.example.mini_project.controller;
 
 import com.example.mini_project.auth.AuthenticationResponse;
+import com.example.mini_project.dto.ResponseDto;
 import com.example.mini_project.dto.user.Request.LoginRequestDto;
 import com.example.mini_project.dto.user.Request.RegisterRequest;
 import com.example.mini_project.service.user.UserServiceImpl;
@@ -22,7 +23,7 @@ public class UserController {
     private final UserServiceImpl service;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(
+    public ResponseEntity<ResponseDto> register(
             @Valid @RequestBody RegisterRequest request
     ) {
         return ResponseEntity.ok(service.register(request));
