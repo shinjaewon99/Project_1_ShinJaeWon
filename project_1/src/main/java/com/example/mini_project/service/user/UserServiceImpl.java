@@ -2,6 +2,7 @@ package com.example.mini_project.service.user;
 
 import com.example.mini_project.auth.AuthenticationResponse;
 import com.example.mini_project.config.JwtService;
+import com.example.mini_project.dto.ResponseDto;
 import com.example.mini_project.dto.user.Request.LoginRequestDto;
 import com.example.mini_project.dto.user.Request.RegisterRequest;
 import com.example.mini_project.entity.UserEntity;
@@ -24,7 +25,7 @@ public class UserServiceImpl implements UserService {
 
     // 회원가입 메소드
     @Override
-    public AuthenticationResponse register(RegisterRequest request) {
+    public ResponseDto register(RegisterRequest request) {
 
         UserEntity user = UserEntity.builder()
                 .userId(request.getUserId())
@@ -36,10 +37,13 @@ public class UserServiceImpl implements UserService {
                 .build();
         userRepository.save(user);
         String jwt = jwtService.generateToken(user);
-        return AuthenticationResponse
+        AuthenticationResponse
                 .builder()
                 .token(jwt)
                 .build();
+        ResponseDto responseDto = new ResponseDto();
+        responseDto.setMessage("회원가입이 완료되었습니다.");
+        return responseDto;
     }
 
     // 로그인 메소드
