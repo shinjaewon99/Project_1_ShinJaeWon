@@ -2,35 +2,41 @@ package com.example.mini_project.service.comment;
 
 import com.example.mini_project.dto.comment.request.CommentCreateRequestDto;
 import com.example.mini_project.dto.comment.request.CommentDeleteRequestDto;
+import com.example.mini_project.dto.comment.request.CommentReplyRequestDto;
 import com.example.mini_project.dto.comment.request.CommentUpdateRequestDto;
 import com.example.mini_project.dto.comment.response.CommentPageResponseDto;
-import com.example.mini_project.dto.comment.request.CommentReplyRequestDto;
 import com.example.mini_project.entity.CommentEntity;
 import com.example.mini_project.entity.SalesItemEntity;
+import com.example.mini_project.entity.UserEntity;
 import com.example.mini_project.exception.CommentException;
 import com.example.mini_project.repository.CommentRepository;
 import com.example.mini_project.repository.SalesItemRepository;
+import com.example.mini_project.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import static com.example.mini_project.constant.CommonMessage.PAGE_SIZE_INTEGER_NUMBER;
 import static com.example.mini_project.constant.CommonMessage.PAGE_START_INTEGER_NUMBER;
 import static com.example.mini_project.constant.comment.CommentMessage.NOT_FIND_COMMENT_MESSAGE;
 import static com.example.mini_project.constant.salesItem.SalesItemMessage.NOT_FIND_PRODUCT_MESSAGE;
+import static com.example.mini_project.constant.user.UserMessage.NOT_FIND_USER_MESSAGE;
 
 @RequiredArgsConstructor
 @Service
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final SalesItemRepository salesItemRepository;
+    private final UserRepository userRepository;
     CommentException commentException = new CommentException();
 
     // 생성 메소드
     @Override
-    public CommentCreateRequestDto create(Long itemId, CommentCreateRequestDto dto) {
+    public CommentCreateRequestDto create(Long userId, Long itemId, CommentCreateRequestDto dto) {
+        validateExistUserId(userId); // user 존재 여부 검증
         SalesItemEntity findItem = validateExistItemId(itemId); // 물품 id가 존재하지 않은경우
         commentException.validateCreateException(dto); // 댓글 생성 검증
 
@@ -47,7 +53,8 @@ public class CommentServiceImpl implements CommentService {
 
     // 페이지 조회 메소드
     @Override
-    public Page<CommentPageResponseDto> readPage(Long itemId) {
+    public Page<CommentPageResponseDto> readPage(Long userId, Long itemId) {
+        validateExistUserId(userId);
         validateExistItemId(itemId); // 물품 존재 여부 검증
 
         Pageable pageable = PageRequest.of(PAGE_START_INTEGER_NUMBER, PAGE_SIZE_INTEGER_NUMBER);
@@ -59,7 +66,8 @@ public class CommentServiceImpl implements CommentService {
 
     // 수정 메소드
     @Override
-    public void update(Long itemId, Long commentId, CommentUpdateRequestDto dto) {
+    public void update(Long userId, Long itemId, Long commentId, CommentUpdateRequestDto dto) {
+        validateExistUserId(userId);
         validateExistItemId(itemId); // 물품 존재 여부 검증
         CommentEntity entity = validateExistCommentId(commentId); // 댓글 존재 여부 검증
         commentException.validateWriterOrPassword(entity, dto); // 등록된 댓글의 작성자 혹은 비밀번호 검증
@@ -71,7 +79,8 @@ public class CommentServiceImpl implements CommentService {
 
     // 작성한 댓글에 대한 답글 메소드
     @Override
-    public void commentReply(Long itemId, Long commentId, CommentReplyRequestDto dto) {
+    public void commentReply(Long userId, Long itemId, Long commentId, CommentReplyRequestDto dto) {
+        validateExistUserId(userId);
         SalesItemEntity findItem = validateExistItemId(itemId); // 물품 존재 여부 검증
         CommentEntity entity = validateExistCommentId(commentId); // 댓글 존재 여부 검증
         commentException.validateWriterOrPasswordFromSalesItem(findItem, dto); // 등록된 물품에 대한 작성자 혹은 비밀번호 검증 메소드
@@ -83,7 +92,8 @@ public class CommentServiceImpl implements CommentService {
 
     // 삭제 메소드
     @Override
-    public void delete(Long itemId, Long commentId, CommentDeleteRequestDto dto) {
+    public void delete(Long userId, Long itemId, Long commentId, CommentDeleteRequestDto dto) {
+        validateExistUserId(userId);
         validateExistItemId(itemId); // 물품 존재 여부 검증
         CommentEntity entity = validateExistCommentId(commentId); // 댓글 존재 여부 검증
         commentException.validateWriterOrPassword(entity, dto); // 등록된 댓글의 작성자 혹은 비밀번호가 다를경우
@@ -102,5 +112,13 @@ public class CommentServiceImpl implements CommentService {
     public CommentEntity validateExistCommentId(Long commentId) {
         return commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException(NOT_FIND_COMMENT_MESSAGE));
+    }
+
+    // userId 존재 여부 검증 메소드
+    @Override
+    @Transactional
+    public UserEntity validateExistUserId(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException(NOT_FIND_USER_MESSAGE));
     }
 }

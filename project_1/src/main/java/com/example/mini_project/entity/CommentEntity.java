@@ -20,7 +20,7 @@ public class CommentEntity {
     // N 대 1 매핑 관계 : 하나의 상품에는 여러가지 제안을 할수 있음
     // X to One 관계에서는 LAZY를 해줘야 N+1 이슈 방지
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sales_id")
+    @JoinColumn(name = "item_id")
     @JsonIgnore
     private SalesItemEntity salesItem;
     private String writer;
@@ -28,11 +28,17 @@ public class CommentEntity {
     private String content;
     private String reply;
 
+    // 연관관계 편의 메소드 (중복을 방지)
+    public void setItem(SalesItemEntity salesItem) {
+        this.salesItem = salesItem;
+        salesItem.getComments().add(this);
+    }
+
     // 생성 메소드
     @Builder
     public static CommentEntity create(SalesItemEntity itemId, String writer, String password, String content) {
         CommentEntity entity = new CommentEntity();
-        entity.salesItem = itemId;
+        entity.setItem(itemId);
         entity.writer = writer;
         entity.password = password;
         entity.content = content;
@@ -50,9 +56,5 @@ public class CommentEntity {
     // 엔티티 setter를 막기위한 commentReply 메소드
     public void commentReplyCreate(String reply) {
         this.reply = reply;
-    }
-
-    public void setItem(SalesItemEntity item) {
-        this.salesItem = item;
     }
 }
