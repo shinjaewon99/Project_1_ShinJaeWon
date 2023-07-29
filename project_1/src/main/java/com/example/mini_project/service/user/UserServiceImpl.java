@@ -14,9 +14,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -24,6 +26,7 @@ public class UserServiceImpl implements UserService {
     private final AuthenticationManager authenticationManager;
 
     // 회원가입 메소드
+    @Transactional
     @Override
     public ResponseDto register(RegisterRequest request) {
 
@@ -47,6 +50,7 @@ public class UserServiceImpl implements UserService {
     }
 
     // 로그인 메소드
+    @Transactional
     @Override
     public AuthenticationResponse authenticate(LoginRequestDto request) {
         // 사용자를 인증
