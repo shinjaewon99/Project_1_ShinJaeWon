@@ -36,7 +36,7 @@ public class CommentServiceImpl implements CommentService {
 
         CommentEntity entity = CommentEntity
                 .builder()
-                .itemId(findItem.getId())
+                .itemId(findItem)
                 .writer(dto.getWriter())
                 .password(dto.getPassword())
                 .content(dto.getContent())
