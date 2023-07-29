@@ -22,15 +22,15 @@ import static com.example.mini_project.constant.CommonMessage.MESSAGE;
 import static com.example.mini_project.constant.salesItem.SalesItemMessage.*;
 
 @RestController
-@RequestMapping("/items")
+@RequestMapping("user/{userId}/items")
 @RequiredArgsConstructor
 public class SalesItemController {
     private final SalesItemServiceImpl service;
 
     // 등록
     @PostMapping
-    public ResponseEntity<Map<String, String>> create(@RequestBody ItemCreateRequestDto dto) {
-        service.create(dto);
+    public ResponseEntity<Map<String, String>> create(@PathVariable Long userId, @RequestBody ItemCreateRequestDto dto) {
+        service.create(userId, dto);
         Map<String, String> responseBody = new HashMap<>();
         responseBody.put(MESSAGE, SIGN_UP_MESSAGE);
 
@@ -39,8 +39,8 @@ public class SalesItemController {
 
     // 단일 조회
     @GetMapping("{itemId}")
-    public ItemReadOneResponseDto readOne(@PathVariable("itemId") Long itemId) {
-        return service.readOne(itemId);
+    public ItemReadOneResponseDto readOne(@PathVariable Long userId, @PathVariable("itemId") Long itemId) {
+        return service.readOne(userId, itemId);
     }
 
     // 전체 조회
@@ -52,16 +52,20 @@ public class SalesItemController {
 
     // 페이징 조회
     @GetMapping
-    public Page<ItemPageResponseDto> readPage(@RequestParam("page") Integer page, @RequestParam("limit") Integer limit) {
-        return service.readPage(page, limit);
+    public Page<ItemPageResponseDto> readPage(@PathVariable Long userId,
+                                              @RequestParam("page") Integer page,
+                                              @RequestParam("limit") Integer limit) {
+        return service.readPage(userId, page, limit);
     }
 
 
     // 수정
     @RequestMapping(value = "{itemId}", method = RequestMethod.PUT)
-    public ResponseEntity<Map<String, String>> update(@PathVariable("itemId") Long itemId, @RequestBody ItemUpdateRequestDto dto) {
+    public ResponseEntity<Map<String, String>> update(@PathVariable Long userId,
+                                                      @PathVariable("itemId") Long itemId,
+                                                      @RequestBody ItemUpdateRequestDto dto) {
 
-        service.update(itemId, dto);
+        service.update(userId, itemId, dto);
         Map<String, String> responseBody = new HashMap<>();
         responseBody.put(MESSAGE, UPDATE_MESSAGE);
 
@@ -70,11 +74,12 @@ public class SalesItemController {
 
     // 파일 업로드
     @RequestMapping(value = "{itemId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, method = RequestMethod.PUT)
-    public ResponseEntity<Map<String, String>> uploadFile(@PathVariable("itemId") Long itemId,
+    public ResponseEntity<Map<String, String>> uploadFile(@PathVariable Long userId,
+                                                          @PathVariable("itemId") Long itemId,
                                                           @RequestParam("image") MultipartFile file,
                                                           ItemCreateRequestDto dto) throws IOException {
 
-        service.uploadFile(itemId, file, dto);
+        service.uploadFile(userId, itemId, file, dto);
 
         Map<String, String> responseBody = new HashMap<>();
         responseBody.put(MESSAGE, UPLOAD_IMAGE_MESSAGE);
@@ -83,8 +88,10 @@ public class SalesItemController {
 
     // 삭제 메소드
     @RequestMapping(value = "{itemId}", method = RequestMethod.DELETE)
-    public ResponseEntity<Map<String, String>> delete(@PathVariable("itemId") Long itemId, @RequestBody ItemDeleteRequestDto dto) {
-        service.delete(itemId, dto);
+    public ResponseEntity<Map<String, String>> delete(@PathVariable Long userId,
+                                                      @PathVariable("itemId") Long itemId,
+                                                      @RequestBody ItemDeleteRequestDto dto) {
+        service.delete(userId, itemId, dto);
         Map<String, String> responseBody = new HashMap<>();
         responseBody.put(MESSAGE, DELETE_MESSAGE);
         return ResponseEntity.ok(responseBody);
