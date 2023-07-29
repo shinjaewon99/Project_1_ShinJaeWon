@@ -1,6 +1,6 @@
-package com.example.mini_project.dto.salesItem;
+package com.example.mini_project.dto.salesItem.response;
 
-import com.example.mini_project.dto.user.Request.RegisterRequest;
+import com.example.mini_project.dto.salesItem.request.ItemRequest;
 import com.example.mini_project.entity.SalesItemEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,18 +10,18 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 // 페이지 반환 DTO
-public class SalesItemPageResponseDto {
+public class ItemPageResponseDto {
     // 호출 할때마다 새로운 객체 생성을 막기위한 static 상수
-    private static final SalesItemPageResponseDto EXISTING_ITEM_PAGE_DTO = new SalesItemPageResponseDto();
+    private static final ItemPageResponseDto EXISTING_ITEM_PAGE_DTO = new ItemPageResponseDto();
+
     private Long id;
     private String title;
     private String description;
     private String imageUrl;
     private Integer minPriceWanted;
     private String status;
-
-    public static SalesItemPageResponseDto pageResponse(SalesItemEntity entity) {
-        SalesItemPageResponseDto dto = getItemPageDto();
+    public static ItemPageResponseDto pageResponse(SalesItemEntity entity) {
+        ItemPageResponseDto dto = getItemPageDto();
 
         dto.setId(entity.getId());
         dto.setTitle(entity.getTitle());
@@ -32,7 +32,7 @@ public class SalesItemPageResponseDto {
 
         return dto;
     }
-    private static SalesItemPageResponseDto getItemPageDto() {
+    private static ItemPageResponseDto getItemPageDto() {
         return EXISTING_ITEM_PAGE_DTO;
     }
 }
