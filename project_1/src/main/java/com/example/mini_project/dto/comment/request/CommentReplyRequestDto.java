@@ -1,6 +1,5 @@
 package com.example.mini_project.dto.comment.request;
 
-import com.example.mini_project.dto.salesItem.request.ItemCreateRequestDto;
 import com.example.mini_project.entity.CommentEntity;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,7 +24,7 @@ public class CommentReplyRequestDto {
         return dto;
     }
 
-    private static CommentReplyRequestDto getCommentReplyDto(){
+    private static CommentReplyRequestDto getCommentReplyDto() {
         return EXISTING_COMMENT_REPLY_DTO;
     }
 }

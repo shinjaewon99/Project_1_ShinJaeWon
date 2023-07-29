@@ -21,7 +21,7 @@ public class CommentDeleteRequestDto {
         return dto;
     }
 
-    private static CommentDeleteRequestDto getCommentDeleteDto(){
+    private static CommentDeleteRequestDto getCommentDeleteDto() {
         return EXISTING_COMMENT_DELETE_DTO;
     }
 }
