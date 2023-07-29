@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SalesItemCreateDto {
-
+    private static final SalesItemCreateDto EXISTING_ITEM_CRETE_DTO = new SalesItemCreateDto();
     private String title;
     private String description;
     private Integer minPriceWanted;
@@ -18,7 +18,7 @@ public class SalesItemCreateDto {
 
     public static SalesItemCreateDto entityToDto(SalesItemEntity entity) {
 
-        SalesItemCreateDto dto = new SalesItemCreateDto();
+        SalesItemCreateDto dto = getItemCreteDto();
 
         dto.setTitle(entity.getTitle());
         dto.setDescription(entity.getDescription());
@@ -28,5 +28,9 @@ public class SalesItemCreateDto {
         dto.setPassword(dto.getPassword());
 
         return dto;
+    }
+
+    private static SalesItemCreateDto getItemCreteDto() {
+        return EXISTING_ITEM_CRETE_DTO;
     }
 }
