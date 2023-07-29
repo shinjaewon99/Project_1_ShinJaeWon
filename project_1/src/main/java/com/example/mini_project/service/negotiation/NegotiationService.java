@@ -7,18 +7,21 @@ import com.example.mini_project.dto.negotiation.request.NegotiationUpdateRequest
 import com.example.mini_project.dto.negotiation.response.NegotiationPageResponseDto;
 import com.example.mini_project.entity.NegotiationEntity;
 import com.example.mini_project.entity.SalesItemEntity;
+import com.example.mini_project.entity.UserEntity;
 import org.springframework.data.domain.Page;
 
 public interface NegotiationService {
-    NegotiationCreateRequestDto create(Long itemId, NegotiationCreateRequestDto dto);
+    NegotiationCreateRequestDto create(Long userId, Long itemId, NegotiationCreateRequestDto dto);
 
-    void updateProposal(Long itemId, Long proposalId, NegotiationUpdateRequestDto dto, ResponseDto response);
+    void updateProposal(Long userId, Long itemId, Long proposalId, NegotiationUpdateRequestDto dto, ResponseDto response);
 
-    Page<NegotiationPageResponseDto> readPage(Long itemId, String writer, String password, Integer page);
+    Page<NegotiationPageResponseDto> readPage(Long userId, Long itemId, String writer, String password, Integer page);
 
-    void delete(Long itemId, Long proposalId, NegotiationDeleteRequestDto dto);
+    void delete(Long userId, Long itemId, Long proposalId, NegotiationDeleteRequestDto dto);
 
     SalesItemEntity validateExistItemId(Long itemId);
 
     NegotiationEntity validateExistProposalId(Long proposalId);
+
+    UserEntity validateExistUserId(Long userId);
 }

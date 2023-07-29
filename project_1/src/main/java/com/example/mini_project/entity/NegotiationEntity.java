@@ -14,24 +14,29 @@ public class NegotiationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private Long itemId;
+    // N 대 1 매핑 관계 : 하나의 상품에는 여러가지 제안을 할수 있음
+    // X to One 관계에서는 LAZY를 해줘야 N+1 이슈 방지
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "item_id")
+    private SalesItemEntity salesItem;
     private Integer suggestedPrice;
     private String status;
     private String writer;
     private String password;
 
-    // N 대 1 매핑 관계 : 하나의 상품에는 여러가지 제안을 할수 있음
-    // X to One 관계에서는 LAZY를 해줘야 N+1 이슈 방지
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sales_id")
-    private SalesItemEntity salesItem;
+    // 연관관계 편의 메소드 (중복을 방지)
+    public void setItem(SalesItemEntity salesItem) {
+        this.salesItem = salesItem;
+        salesItem.getNegotiations().add(this);
+    }
 
     // 생성 메소드
     @Builder
-    public static NegotiationEntity create(String writer, String password, Integer suggestedPrice, String status) {
+    public static NegotiationEntity create(SalesItemEntity itemId,
+                                           String writer, String password, Integer suggestedPrice, String status) {
         NegotiationEntity entity = new NegotiationEntity();
 
+        entity.setItem(itemId);
         entity.writer = writer;
         entity.password = password;
         entity.suggestedPrice = suggestedPrice;

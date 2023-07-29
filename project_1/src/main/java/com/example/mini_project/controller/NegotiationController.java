@@ -20,16 +20,17 @@ import static com.example.mini_project.constant.negotiation.NegotiationMessage.D
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/items/{itemId}/proposals")
+@RequestMapping("/user/{userId}/items/{itemId}/proposals")
 public class NegotiationController {
     private final NegotiationServiceImpl service;
     ResponseDto message = new ResponseDto();
 
     // 생성
     @PostMapping
-    public ResponseEntity<Map<String, String>> create(@PathVariable Long itemId,
+    public ResponseEntity<Map<String, String>> create(@PathVariable Long userId,
+                                                      @PathVariable Long itemId,
                                                       @RequestBody NegotiationCreateRequestDto dto) {
-        service.create(itemId, dto);
+        service.create(userId, itemId, dto);
         Map<String, String> responseBody = new HashMap<>();
         responseBody.put(MESSAGE, CREATE_MESSAGE);
         return ResponseEntity.ok(responseBody);
@@ -37,20 +38,22 @@ public class NegotiationController {
 
     // 페이징 조회
     @GetMapping
-    public Page<NegotiationPageResponseDto> readPage(@PathVariable("itemId") Long itemId, @RequestParam String writer,
+    public Page<NegotiationPageResponseDto> readPage(@PathVariable Long userId,
+                                                     @PathVariable("itemId") Long itemId, @RequestParam String writer,
                                                      @RequestParam String password, @RequestParam Integer page) {
-        return service.readPage(itemId, writer, password, page);
+        return service.readPage(userId, itemId, writer, password, page);
     }
 
 
     // 수정
     // 상태 변경
     @RequestMapping(value = {"{proposalId}"}, method = RequestMethod.PUT)
-    public ResponseEntity<Map<String, String>> update(@PathVariable Long itemId,
+    public ResponseEntity<Map<String, String>> update(@PathVariable Long userId,
+                                                      @PathVariable Long itemId,
                                                       @PathVariable Long proposalId,
                                                       @RequestBody NegotiationUpdateRequestDto dto) {
 
-        service.updateProposal(itemId, proposalId, dto, message);
+        service.updateProposal(userId, itemId, proposalId, dto, message);
         Map<String, String> responseBody = new HashMap<>();
         responseBody.put(MESSAGE, message.getMessage());
         return ResponseEntity.ok(responseBody);
@@ -58,11 +61,12 @@ public class NegotiationController {
 
     // 삭제
     @RequestMapping(value = {"{proposalId}"}, method = RequestMethod.DELETE)
-    public ResponseEntity<Map<String, String>> delete(@PathVariable Long itemId,
+    public ResponseEntity<Map<String, String>> delete(@PathVariable Long userId,
+                                                      @PathVariable Long itemId,
                                                       @PathVariable Long proposalId,
                                                       @RequestBody NegotiationDeleteRequestDto dto) {
 
-        service.delete(itemId, proposalId, dto);
+        service.delete(userId, itemId, proposalId, dto);
         Map<String, String> responseBody = new HashMap<>();
         responseBody.put(MESSAGE, DELETE_MESSAGE);
         return ResponseEntity.ok(responseBody);
