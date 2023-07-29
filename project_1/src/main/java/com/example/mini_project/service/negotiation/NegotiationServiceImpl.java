@@ -1,15 +1,16 @@
 package com.example.mini_project.service.negotiation;
 
 import com.example.mini_project.dto.ResponseDto;
-import com.example.mini_project.dto.negotiation.NegotiationCreateDto;
-import com.example.mini_project.dto.negotiation.NegotiationDeleteDto;
-import com.example.mini_project.dto.negotiation.NegotiationPageResponseDto;
-import com.example.mini_project.dto.negotiation.NegotiationUpdateDto;
+import com.example.mini_project.dto.negotiation.request.NegotiationCreateRequestDto;
+import com.example.mini_project.dto.negotiation.request.NegotiationDeleteRequestDto;
+import com.example.mini_project.dto.negotiation.request.NegotiationUpdateRequestDto;
+import com.example.mini_project.dto.negotiation.response.NegotiationPageResponseDto;
 import com.example.mini_project.entity.NegotiationEntity;
 import com.example.mini_project.entity.SalesItemEntity;
 import com.example.mini_project.exception.NegotiationException;
 import com.example.mini_project.repository.NegotiationRepository;
 import com.example.mini_project.repository.SalesItemRepository;
+import com.example.mini_project.util.item.ItemStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,7 +33,7 @@ public class NegotiationServiceImpl implements NegotiationService {
 
     // 생성 메소드
     @Override
-    public NegotiationCreateDto create(Long itemId, NegotiationCreateDto dto) {
+    public NegotiationCreateRequestDto create(Long itemId, NegotiationCreateRequestDto dto) {
         validateExistItemId(itemId); // 물품 존재 여부 검증
         negotiationException.validateCreateException(dto); // 구매 제안 생성 검증
         count++; // 구매 제안 생성 증가
@@ -40,10 +41,10 @@ public class NegotiationServiceImpl implements NegotiationService {
                 .writer(dto.getWriter())
                 .password(dto.getPassword())
                 .suggestedPrice(dto.getSuggestedPrice())
-                .status(STATUS_MESSAGE)
+                .status(String.valueOf(ItemStatus.제안))
                 .build();
 
-        return NegotiationCreateDto.entityToDto(negotiationRepository.save(negotiationEntity));
+        return NegotiationCreateRequestDto.entityToDto(negotiationRepository.save(negotiationEntity));
     }
 
     // 페이징 조회 메소드
@@ -73,7 +74,7 @@ public class NegotiationServiceImpl implements NegotiationService {
     // 상태 변경 메소드
     @Override
     public void updateProposal(Long itemId, Long proposalId,
-                               NegotiationUpdateDto dto, ResponseDto response) {
+                               NegotiationUpdateRequestDto dto, ResponseDto response) {
         SalesItemEntity salesItemEntity = validateExistItemId(itemId); // 물품 존재 여부 검증
         NegotiationEntity negotiationEntity = validateExistProposalId(proposalId); // 구매 제안 존재 여부 검증
 
@@ -119,12 +120,12 @@ public class NegotiationServiceImpl implements NegotiationService {
                 }
             }
         }
-        NegotiationUpdateDto.entityToDto(negotiationRepository.save(negotiationEntity));
+        NegotiationUpdateRequestDto.entityToDto(negotiationRepository.save(negotiationEntity));
     }
 
     // 삭제 메소드
     @Override
-    public void delete(Long itemId, Long proposalId, NegotiationDeleteDto dto) {
+    public void delete(Long itemId, Long proposalId, NegotiationDeleteRequestDto dto) {
         validateExistItemId(itemId); // 물품 존재 여부 검증
         NegotiationEntity entity = validateExistProposalId(proposalId); // 구매 제안 존재 여부 검증
 

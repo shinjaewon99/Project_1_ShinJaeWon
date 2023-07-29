@@ -1,10 +1,10 @@
 package com.example.mini_project.controller;
 
 import com.example.mini_project.dto.ResponseDto;
-import com.example.mini_project.dto.negotiation.NegotiationCreateDto;
-import com.example.mini_project.dto.negotiation.NegotiationDeleteDto;
-import com.example.mini_project.dto.negotiation.NegotiationPageResponseDto;
-import com.example.mini_project.dto.negotiation.NegotiationUpdateDto;
+import com.example.mini_project.dto.negotiation.request.NegotiationCreateRequestDto;
+import com.example.mini_project.dto.negotiation.request.NegotiationDeleteRequestDto;
+import com.example.mini_project.dto.negotiation.request.NegotiationUpdateRequestDto;
+import com.example.mini_project.dto.negotiation.response.NegotiationPageResponseDto;
 import com.example.mini_project.service.negotiation.NegotiationServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,7 +28,7 @@ public class NegotiationController {
     // 생성
     @PostMapping
     public ResponseEntity<Map<String, String>> create(@PathVariable Long itemId,
-                                                      @RequestBody NegotiationCreateDto dto) {
+                                                      @RequestBody NegotiationCreateRequestDto dto) {
         service.create(itemId, dto);
         Map<String, String> responseBody = new HashMap<>();
         responseBody.put(MESSAGE, CREATE_MESSAGE);
@@ -48,7 +48,7 @@ public class NegotiationController {
     @RequestMapping(value = {"{proposalId}"}, method = RequestMethod.PUT)
     public ResponseEntity<Map<String, String>> update(@PathVariable Long itemId,
                                                       @PathVariable Long proposalId,
-                                                      @RequestBody NegotiationUpdateDto dto) {
+                                                      @RequestBody NegotiationUpdateRequestDto dto) {
 
         service.updateProposal(itemId, proposalId, dto, message);
         Map<String, String> responseBody = new HashMap<>();
@@ -60,7 +60,7 @@ public class NegotiationController {
     @RequestMapping(value = {"{proposalId}"}, method = RequestMethod.DELETE)
     public ResponseEntity<Map<String, String>> delete(@PathVariable Long itemId,
                                                       @PathVariable Long proposalId,
-                                                      @RequestBody NegotiationDeleteDto dto) {
+                                                      @RequestBody NegotiationDeleteRequestDto dto) {
 
         service.delete(itemId, proposalId, dto);
         Map<String, String> responseBody = new HashMap<>();
