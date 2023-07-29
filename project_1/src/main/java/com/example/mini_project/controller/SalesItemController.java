@@ -1,9 +1,11 @@
 package com.example.mini_project.controller;
 
 
-import com.example.mini_project.dto.salesItem.SalesItemCreateDto;
-import com.example.mini_project.dto.salesItem.SalesItemPageResponseDto;
-import com.example.mini_project.dto.salesItem.SalesItemReadOneDto;
+import com.example.mini_project.dto.salesItem.request.ItemCreateRequestDto;
+import com.example.mini_project.dto.salesItem.request.ItemDeleteRequestDto;
+import com.example.mini_project.dto.salesItem.request.ItemUpdateRequestDto;
+import com.example.mini_project.dto.salesItem.response.ItemPageResponseDto;
+import com.example.mini_project.dto.salesItem.response.ItemReadOneResponseDto;
 import com.example.mini_project.service.salesItem.SalesItemServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,7 +29,7 @@ public class SalesItemController {
 
     // 등록
     @PostMapping
-    public ResponseEntity<Map<String, String>> create(@RequestBody SalesItemCreateDto dto) {
+    public ResponseEntity<Map<String, String>> create(@RequestBody ItemCreateRequestDto dto) {
         service.create(dto);
         Map<String, String> responseBody = new HashMap<>();
         responseBody.put(MESSAGE, SIGN_UP_MESSAGE);
@@ -37,7 +39,7 @@ public class SalesItemController {
 
     // 단일 조회
     @GetMapping("{itemId}")
-    public SalesItemReadOneDto readOne(@PathVariable("itemId") Long itemId) {
+    public ItemReadOneResponseDto readOne(@PathVariable("itemId") Long itemId) {
         return service.readOne(itemId);
     }
 
@@ -50,14 +52,14 @@ public class SalesItemController {
 
     // 페이징 조회
     @GetMapping
-    public Page<SalesItemPageResponseDto> readPage(@RequestParam("page") Integer page, @RequestParam("limit") Integer limit) {
+    public Page<ItemPageResponseDto> readPage(@RequestParam("page") Integer page, @RequestParam("limit") Integer limit) {
         return service.readPage(page, limit);
     }
 
 
     // 수정
     @RequestMapping(value = "{itemId}", method = RequestMethod.PUT)
-    public ResponseEntity<Map<String, String>> update(@PathVariable("itemId") Long itemId, @RequestBody SalesItemCreateDto dto) {
+    public ResponseEntity<Map<String, String>> update(@PathVariable("itemId") Long itemId, @RequestBody ItemUpdateRequestDto dto) {
 
         service.update(itemId, dto);
         Map<String, String> responseBody = new HashMap<>();
@@ -70,7 +72,7 @@ public class SalesItemController {
     @RequestMapping(value = "{itemId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, method = RequestMethod.PUT)
     public ResponseEntity<Map<String, String>> uploadFile(@PathVariable("itemId") Long itemId,
                                                           @RequestParam("image") MultipartFile file,
-                                                          SalesItemCreateDto dto) throws IOException {
+                                                          ItemCreateRequestDto dto) throws IOException {
 
         service.uploadFile(itemId, file, dto);
 
@@ -81,7 +83,7 @@ public class SalesItemController {
 
     // 삭제 메소드
     @RequestMapping(value = "{itemId}", method = RequestMethod.DELETE)
-    public ResponseEntity<Map<String, String>> delete(@PathVariable("itemId") Long itemId, @RequestBody SalesItemCreateDto dto) {
+    public ResponseEntity<Map<String, String>> delete(@PathVariable("itemId") Long itemId, @RequestBody ItemDeleteRequestDto dto) {
         service.delete(itemId, dto);
         Map<String, String> responseBody = new HashMap<>();
         responseBody.put(MESSAGE, DELETE_MESSAGE);
