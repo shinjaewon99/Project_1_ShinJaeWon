@@ -1,8 +1,10 @@
 package com.example.mini_project.service.comment;
 
-import com.example.mini_project.dto.comment.CommentCreateDto;
-import com.example.mini_project.dto.comment.CommentPageResponseDto;
-import com.example.mini_project.dto.comment.CommentReplyDto;
+import com.example.mini_project.dto.comment.request.CommentCreateRequestDto;
+import com.example.mini_project.dto.comment.request.CommentDeleteRequestDto;
+import com.example.mini_project.dto.comment.request.CommentUpdateRequestDto;
+import com.example.mini_project.dto.comment.response.CommentPageResponseDto;
+import com.example.mini_project.dto.comment.request.CommentReplyRequestDto;
 import com.example.mini_project.entity.CommentEntity;
 import com.example.mini_project.entity.SalesItemEntity;
 import com.example.mini_project.exception.CommentException;
@@ -28,7 +30,7 @@ public class CommentServiceImpl implements CommentService {
 
     // 생성 메소드
     @Override
-    public CommentCreateDto create(Long itemId, CommentCreateDto dto) {
+    public CommentCreateRequestDto create(Long itemId, CommentCreateRequestDto dto) {
         SalesItemEntity findItem = validateExistItemId(itemId); // 물품 id가 존재하지 않은경우
         commentException.validateCreateException(dto); // 댓글 생성 검증
 
@@ -40,7 +42,7 @@ public class CommentServiceImpl implements CommentService {
                 .content(dto.getContent())
                 .build();
 
-        return CommentCreateDto.entityToDto(commentRepository.save(entity));
+        return CommentCreateRequestDto.entityToDto(commentRepository.save(entity));
     }
 
     // 페이지 조회 메소드
@@ -57,31 +59,31 @@ public class CommentServiceImpl implements CommentService {
 
     // 수정 메소드
     @Override
-    public void update(Long itemId, Long commentId, CommentCreateDto dto) {
+    public void update(Long itemId, Long commentId, CommentUpdateRequestDto dto) {
         validateExistItemId(itemId); // 물품 존재 여부 검증
         CommentEntity entity = validateExistCommentId(commentId); // 댓글 존재 여부 검증
         commentException.validateWriterOrPassword(entity, dto); // 등록된 댓글의 작성자 혹은 비밀번호 검증
         entity.updateComment(dto.getWriter(), dto.getPassword(), dto.getContent());
 
         commentRepository.save(entity);
-        CommentCreateDto.entityToDto(entity);
+        CommentCreateRequestDto.entityToDto(entity);
     }
 
     // 작성한 댓글에 대한 답글 메소드
     @Override
-    public void commentReply(Long itemId, Long commentId, CommentReplyDto dto) {
+    public void commentReply(Long itemId, Long commentId, CommentReplyRequestDto dto) {
         SalesItemEntity findItem = validateExistItemId(itemId); // 물품 존재 여부 검증
         CommentEntity entity = validateExistCommentId(commentId); // 댓글 존재 여부 검증
         commentException.validateWriterOrPasswordFromSalesItem(findItem, dto); // 등록된 물품에 대한 작성자 혹은 비밀번호 검증 메소드
         entity.commentReplyCreate(dto.getReply());
 
         commentRepository.save(entity);
-        CommentCreateDto.entityToDto(entity);
+        CommentCreateRequestDto.entityToDto(entity);
     }
 
     // 삭제 메소드
     @Override
-    public void delete(Long itemId, Long commentId, CommentCreateDto dto) {
+    public void delete(Long itemId, Long commentId, CommentDeleteRequestDto dto) {
         validateExistItemId(itemId); // 물품 존재 여부 검증
         CommentEntity entity = validateExistCommentId(commentId); // 댓글 존재 여부 검증
         commentException.validateWriterOrPassword(entity, dto); // 등록된 댓글의 작성자 혹은 비밀번호가 다를경우
