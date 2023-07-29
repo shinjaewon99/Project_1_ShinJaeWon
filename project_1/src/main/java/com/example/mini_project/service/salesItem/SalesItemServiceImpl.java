@@ -1,8 +1,10 @@
 package com.example.mini_project.service.salesItem;
 
-import com.example.mini_project.dto.salesItem.SalesItemCreateDto;
-import com.example.mini_project.dto.salesItem.SalesItemPageResponseDto;
-import com.example.mini_project.dto.salesItem.SalesItemReadOneDto;
+import com.example.mini_project.dto.salesItem.request.ItemCreateRequestDto;
+import com.example.mini_project.dto.salesItem.request.ItemDeleteRequestDto;
+import com.example.mini_project.dto.salesItem.request.ItemUpdateRequestDto;
+import com.example.mini_project.dto.salesItem.response.ItemPageResponseDto;
+import com.example.mini_project.dto.salesItem.response.ItemReadOneResponseDto;
 import com.example.mini_project.entity.SalesItemEntity;
 import com.example.mini_project.exception.SalesItemException;
 import com.example.mini_project.repository.SalesItemRepository;
@@ -30,7 +32,7 @@ public class SalesItemServiceImpl implements SalesItemService {
 
     // 생성 메소드
     @Override
-    public SalesItemCreateDto create(SalesItemCreateDto dto) {
+    public ItemCreateRequestDto create(ItemCreateRequestDto dto) {
         salesItemException.validateCreateException(dto); // 제목, 설명, 최소 가격, 작성자, 비밀번호 예외 검증
 
         SalesItemEntity entity = SalesItemEntity
@@ -43,31 +45,31 @@ public class SalesItemServiceImpl implements SalesItemService {
                 .password(dto.getPassword())
                 .build();
 
-        return SalesItemCreateDto.entityToDto(repository.save(entity));
+        return ItemCreateRequestDto.entityToDto(repository.save(entity));
     }
 
     // 전체 조회 메소드
     @Override
-    public List<SalesItemCreateDto> readAll() {
-        List<SalesItemCreateDto> salesItemCreateDtoList = new ArrayList<>();
+    public List<ItemCreateRequestDto> readAll() {
+        List<ItemCreateRequestDto> itemCreateRequestDtoList = new ArrayList<>();
         for (SalesItemEntity entity : repository.findAll()) {
-            salesItemCreateDtoList.add(SalesItemCreateDto.entityToDto(entity));
+            itemCreateRequestDtoList.add(ItemCreateRequestDto.entityToDto(entity));
         }
 
-        return salesItemCreateDtoList;
+        return itemCreateRequestDtoList;
     }
 
     // 단일 조회 메소드
     @Override
-    public SalesItemReadOneDto readOne(Long id) {
+    public ItemReadOneResponseDto readOne(Long id) {
         SalesItemEntity entity = validateExistItemId(id); // 물품 존재 여부 검증
 
-        return SalesItemReadOneDto.entityToDto(entity);
+        return ItemReadOneResponseDto.entityToDto(entity);
     }
 
     // 페이지 조회 메소드
     @Override
-    public Page<SalesItemPageResponseDto> readPage(Integer page, Integer limit) {
+    public Page<ItemPageResponseDto> readPage(Integer page, Integer limit) {
         // PageRequest.of(page,size,Sort)
         // page : 0부터 시작, size : 페이징 갯수, Sort : 오름차순, 내림차순
         Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
@@ -75,12 +77,12 @@ public class SalesItemServiceImpl implements SalesItemService {
         Page<SalesItemEntity> itemPage = repository.findAll(pageable);
 
         // 엔티티를 그대로 반환하면 원치않은 정보가 반환될수 있음으로, PageDto로 변환후 반환
-        return itemPage.map(SalesItemPageResponseDto::pageResponse);
+        return itemPage.map(ItemPageResponseDto::pageResponse);
     }
 
     // 수정 메소드
     @Override
-    public void update(Long id, SalesItemCreateDto dto) {
+    public void update(Long id, ItemUpdateRequestDto dto) {
         SalesItemEntity entity = validateExistItemId(id); // 물품 존재 여부 검증
         salesItemException.validateWriterOrPassword(entity, dto); // 등록된 물품에 대한 작성자 혹은 비밀번호 검증
 
@@ -89,12 +91,12 @@ public class SalesItemServiceImpl implements SalesItemService {
 
         repository.save(entity);
 
-        SalesItemCreateDto.entityToDto(entity);
+        ItemUpdateRequestDto.entityToDto(entity);
     }
 
     // 파일 업로드 메소드
     @Override
-    public void uploadFile(Long itemId, MultipartFile file, SalesItemCreateDto dto) {
+    public void uploadFile(Long itemId, MultipartFile file, ItemCreateRequestDto dto) {
         SalesItemEntity entity = validateExistItemId(itemId); // 물품 존재 여부 검증
         salesItemException.validateWriterOrPassword(entity, dto); // 등록된 물품에 대한 작성자 혹은 비밀번호 검증
         salesItemException.validateExistFileException(file); // 업로드 파일 존재 여부 검증
@@ -121,7 +123,7 @@ public class SalesItemServiceImpl implements SalesItemService {
 
     // 삭제 메소드
     @Override
-    public void delete(Long id, SalesItemCreateDto dto) {
+    public void delete(Long id, ItemDeleteRequestDto dto) {
         SalesItemEntity entity = validateExistItemId(id); // 물품 존재 여부 검증
         salesItemException.validateWriterOrPassword(entity, dto); // 등록된 물품에 대한 작성자 혹은 비밀번호 검증
 
