@@ -14,3 +14,5 @@ spring:
     database-platform: org.hibernate.community.dialect.SQLiteDialect
     defer-datasource-initialization: true
 
+jwt:
+  secretKey: secretKeysecretKeysecretKeysecretKeysecretKeysecretKeysecretKeysecretKeysecretKeysecretKey
