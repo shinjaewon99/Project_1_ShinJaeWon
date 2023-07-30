@@ -28,11 +28,26 @@
 ## ▶ DB ERD
 ![1](https://github.com/likelion-backend-5th/Project_1_ShinJaeWon/assets/95893341/47f2ca56-1cef-46ed-9450-8dac72daac30)
 
-✔ USER - ITEM : 1 : N 관계
+양방향 매핑 관계
 
-✔ ITEM - COMMENT : 1 : N 관계
+✔ `USER - ITEM : 1 : N 관계 / ITEM - USER : N : 1 관계`
 
-✔ ITEM - NEGOTIATION : 1 : N 관계
+![2](https://github.com/likelion-backend-5th/Project_1_ShinJaeWon/assets/95893341/912619c4-df70-4568-96ef-add149628b57)
+
+![5](https://github.com/likelion-backend-5th/Project_1_ShinJaeWon/assets/95893341/c0125bb5-823b-4e45-8c88-3c68033d184d)
+
+
+✔ `ITEM - COMMENT : 1 : N 관계 / COMMENT - ITEM : N : 1 관계`
+
+![3](https://github.com/likelion-backend-5th/Project_1_ShinJaeWon/assets/95893341/7a52348b-82ac-4d60-8635-3b722b61340a)
+
+![6](https://github.com/likelion-backend-5th/Project_1_ShinJaeWon/assets/95893341/284367ec-d6d8-4503-af27-95f2b425acb3)
+
+✔ `ITEM - NEGOTIATION : 1 : N 관계 / NEGOTIATION - ITEM : N : 1 관계`
+
+![4](https://github.com/likelion-backend-5th/Project_1_ShinJaeWon/assets/95893341/91bedf17-1d71-4417-b365-3363c58e1e9f)
+
+![7](https://github.com/likelion-backend-5th/Project_1_ShinJaeWon/assets/95893341/20c89864-c8bc-4c15-83ed-8839b56c6ebf)
 
 
 ----
@@ -77,6 +92,13 @@
   </div>
 </details>
 
+`POST /user/register`
+
+`POST /user/signUp`
+
+API 명세서
+
+
 ### 2️⃣ 관계 설정 하기 (연관 관계 매핑)
 🛠 개발 기간 : 7.27 ~ 7.28 
 <details>
@@ -98,6 +120,26 @@
 </ul>
   </div>
 </details>
+
+`POST /user/{userId}/items` : 로그인 하여 발행된 jwt 을 사용하여 인증된 회원의 물품 등록
+
+추가 EndPoint
+
+API 명세서 
+
+----
+
+`POST /user/{userId}/items/{itemId}/comments` : 로그인 하여 발행된 jwt 을 사용하여 인증된 회원의 물품의 댓글 등록
+
+추가 EndPoint
+
+API 명세서 
+
+`POST /user/{userId}/items/{itemId}/proposals` : 로그인 하여 발행된 jwt 을 사용하여 인증된 회원의 물품의 구메제안 등록
+
+추가 EndPoint
+
+API 명세서 
 
 ### 3️⃣ 기능 접근 설정 하기 
 🛠 개발 기간 : 7.28 ~ 7.29 
