@@ -20,6 +20,9 @@ public class SalesItemEntity {
     @Column(name = "item_id")
     private Long id;
 
+    // N 대 1 매핑 관계 : 한명의 회원이 여러가지 상품을 등록 할수 있음
+    // X to One 관계에서는 LAZY를 해줘야 N+1 이슈 방지
+    // JoinColumn : PK 필드명을 작성
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "users_id")
     @JsonIgnore
