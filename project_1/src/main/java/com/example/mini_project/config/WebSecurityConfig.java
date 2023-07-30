@@ -4,6 +4,7 @@ import com.example.mini_project.util.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -31,6 +32,8 @@ public class WebSecurityConfig {
                 // 요청에 대한 보안 설정
                 .authorizeHttpRequests()
                 .requestMatchers("/user/**")
+                .permitAll()
+                .requestMatchers(HttpMethod.GET)
                 .permitAll()
                 .anyRequest()
                 .authenticated()
