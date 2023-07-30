@@ -31,7 +31,7 @@ import static com.example.mini_project.constant.user.UserMessage.NOT_FIND_USER_M
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class SalesItemServiceImpl implements SalesItemService {
+public class SalesItemServiceImpl implements SalesItemService, CommonSalesItemService{
     private final SalesItemRepository salesItemRepository;
     private final UserRepository userRepository;
     SalesItemException salesItemException = new SalesItemException(); // 예외 핸들링 클래스
@@ -160,5 +160,21 @@ public class SalesItemServiceImpl implements SalesItemService {
     public UserEntity validateExistUserId(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(NOT_FIND_USER_MESSAGE));
+    }
+
+    // 등록되지 않은 회원도 조회는 할수 있다.
+    @Override
+    public ItemReadOneResponseDto readOne(Long itemId) {
+        SalesItemEntity findItem = validateExistItemId(itemId);
+        return ItemReadOneResponseDto.entityToDto(findItem);
+    }
+
+    @Override
+    public Page<ItemPageResponseDto> readPage(Integer page, Integer limit) {
+        Pageable pageable = PageRequest.of(page, limit, Sort.by("id").ascending());
+
+        Page<SalesItemEntity> itemPage = salesItemRepository.findAll(pageable);
+
+        return itemPage.map(ItemPageResponseDto::pageResponse);
     }
 }
