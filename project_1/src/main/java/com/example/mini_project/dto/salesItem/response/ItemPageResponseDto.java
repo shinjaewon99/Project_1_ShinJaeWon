@@ -1,6 +1,5 @@
 package com.example.mini_project.dto.salesItem.response;
 
-import com.example.mini_project.dto.salesItem.request.ItemRequest;
 import com.example.mini_project.entity.SalesItemEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,17 +10,15 @@ import lombok.Setter;
 @NoArgsConstructor
 // 페이지 반환 DTO
 public class ItemPageResponseDto {
-    // 호출 할때마다 새로운 객체 생성을 막기위한 static 상수
-    private static final ItemPageResponseDto EXISTING_ITEM_PAGE_DTO = new ItemPageResponseDto();
-
     private Long id;
     private String title;
     private String description;
     private String imageUrl;
     private Integer minPriceWanted;
     private String status;
+
     public static ItemPageResponseDto pageResponse(SalesItemEntity entity) {
-        ItemPageResponseDto dto = getItemPageDto();
+        ItemPageResponseDto dto = new ItemPageResponseDto();
 
         dto.setId(entity.getId());
         dto.setTitle(entity.getTitle());
@@ -31,8 +28,5 @@ public class ItemPageResponseDto {
         dto.setStatus(entity.getStatus());
 
         return dto;
-    }
-    private static ItemPageResponseDto getItemPageDto() {
-        return EXISTING_ITEM_PAGE_DTO;
     }
 }
