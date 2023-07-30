@@ -1,4 +1,4 @@
-#### 기존 https://github.com/likelion-backend-5th/MiniProject_Basic_ShinJaeWon 에서 고도화 작업
+#### 기존 https://github.com/likelion-backend-5th/MiniProject_Basic_ShinJaeWon 에서 고도화 작업 진행
 -----
 🦁 멋쟁이사자처럼 Mini_Project 고도화
 
@@ -96,7 +96,7 @@
 
 `POST /user/signUp`
 
-API 명세서
+#### 🔎 사용자 인증 기능 API 명세서 https://documenter.getpostman.com/view/22851675/2s9XxtxF3c
 
 
 ### 2️⃣ 관계 설정 하기 (연관 관계 매핑)
@@ -121,11 +121,13 @@ API 명세서
   </div>
 </details>
 
+-----
+
 `POST /user/{userId}/items` : 로그인 하여 발행된 jwt 을 사용하여 인증된 회원의 물품 등록
 
 추가 EndPoint
 
-API 명세서 
+#### 🔎 사용자 - 물품  API 명세서  https://documenter.getpostman.com/view/22851675/2s9XxtxFMB
 
 ----
 
@@ -133,13 +135,17 @@ API 명세서
 
 추가 EndPoint
 
-API 명세서 
+#### 🔎 사용자 - 물품 - 물품의 댓글 API 명세서 https://documenter.getpostman.com/view/22851675/2s9XxtxFMC 
+
+----
 
 `POST /user/{userId}/items/{itemId}/proposals` : 로그인 하여 발행된 jwt 을 사용하여 인증된 회원의 물품의 구메제안 등록
 
 추가 EndPoint
 
-API 명세서 
+#### 🔎 사용자 - 물품 - 물품의 구매제안 API 명세서 https://documenter.getpostman.com/view/22851675/2s9XxtxFMD 
+
+-----
 
 ### 3️⃣ 기능 접근 설정 하기 
 🛠 개발 기간 : 7.28 ~ 7.29 
@@ -172,5 +178,9 @@ API 명세서
   </div>
 </details>
 
+#### ➡ 사용자의 인증없이 사용할수 있는 기능 API https://documenter.getpostman.com/view/22851675/2s9XxtxFME
+
 
 ## 📚 배운점
+- Spring Security를 적용하여 인증과 인가에 대해 배울수 있었으며, HTTP의 요청과 URL을 통해 권한 설정을 핸들링 할수 있다는것을 배울수 있었습니다.
+- 연관관계 매핑에 대해서 배울수 있었고, 테이블에 대한 관계에 대해서 배울수 있었습니다.
