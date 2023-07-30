@@ -31,9 +31,11 @@ public class WebSecurityConfig {
                 .disable()
                 // 요청에 대한 보안 설정
                 .authorizeHttpRequests()
-                .requestMatchers("/user/**")
+                .requestMatchers("/user/register")
                 .permitAll()
-                .requestMatchers(HttpMethod.GET)
+                .requestMatchers("/user/signUp")
+                .permitAll()
+                .requestMatchers(HttpMethod.GET, "items/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
