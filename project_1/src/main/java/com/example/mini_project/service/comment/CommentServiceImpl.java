@@ -27,7 +27,8 @@ import static com.example.mini_project.constant.user.UserMessage.NOT_FIND_USER_M
 
 @RequiredArgsConstructor
 @Service
-public class CommentServiceImpl implements CommentService {
+@Transactional
+public class CommentServiceImpl implements CommentService, CommonCommentService {
     private final CommentRepository commentRepository;
     private final SalesItemRepository salesItemRepository;
     private final UserRepository userRepository;
@@ -53,6 +54,7 @@ public class CommentServiceImpl implements CommentService {
 
     // 페이지 조회 메소드
     @Override
+    @Transactional(readOnly = true)
     public Page<CommentPageResponseDto> readPage(Long userId, Long itemId) {
         validateExistUserId(userId);
         validateExistItemId(itemId); // 물품 존재 여부 검증
@@ -116,9 +118,21 @@ public class CommentServiceImpl implements CommentService {
 
     // userId 존재 여부 검증 메소드
     @Override
-    @Transactional
     public UserEntity validateExistUserId(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException(NOT_FIND_USER_MESSAGE));
+    }
+
+    // 인증되지 않은 회원도 댓글을 조회하여 열람할수 있다.
+    @Override
+    @Transactional(readOnly = true)
+    public Page<CommentPageResponseDto> readPage(Long itemId) {
+        validateExistItemId(itemId); // 물품 존재 여부 검증
+
+        Pageable pageable = PageRequest.of(PAGE_START_INTEGER_NUMBER, PAGE_SIZE_INTEGER_NUMBER);
+        Page<CommentEntity> commentsPage = commentRepository.findAll(pageable);
+
+        // commentsPage의 엔티티 반환을 DTO 클래스로 변환하여 반환
+        return commentsPage.map(CommentPageResponseDto::pageResponse);
     }
 }
