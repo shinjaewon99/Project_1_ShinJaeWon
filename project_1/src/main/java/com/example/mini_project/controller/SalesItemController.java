@@ -22,7 +22,7 @@ import static com.example.mini_project.constant.CommonMessage.MESSAGE;
 import static com.example.mini_project.constant.salesItem.SalesItemMessage.*;
 
 @RestController
-@RequestMapping("user/{userId}/items")
+@RequestMapping("/user/{userId}/items")
 @RequiredArgsConstructor
 public class SalesItemController {
     private final SalesItemServiceImpl service;
