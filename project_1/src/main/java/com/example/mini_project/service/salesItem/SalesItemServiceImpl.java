@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,17 +32,26 @@ import static com.example.mini_project.constant.user.UserMessage.NOT_FIND_USER_M
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class SalesItemServiceImpl implements SalesItemService, CommonSalesItemService{
+public class SalesItemServiceImpl implements SalesItemService, CommonSalesItemService {
     private final SalesItemRepository salesItemRepository;
+    private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     SalesItemException salesItemException = new SalesItemException(); // 예외 핸들링 클래스
 
     // 생성 메소드
+    // create 메소드에만 등록된 회원과의 검증 메소드가 존재하는데 이유로는 수정, 삭제 메소드 등에서는 물품이 존재하는지 검증합니다.
+    // 즉 create 메소드를 거쳐 등록된 회원인것이 증명되어 물품이 등록되게 된다면 수정, 삭제 메소드에서는 등록된 회원과의 검증이 필요없습니다.
+    // 추가로 comment, negotiation 클래스에서도 물품이 등록되었는지 검증을 하기 때문에 회원을 검증할 필요가 없게 됩니다.
     @Override
     @Transactional
     public ItemCreateRequestDto create(Long userId, ItemCreateRequestDto dto) {
         UserEntity findUser = validateExistUserId(userId); // user 존재 여부 검증
         salesItemException.validateCreateException(dto); // 제목, 설명, 최소 가격, 작성자, 비밀번호 예외 검증
+
+        // 등록된 회원과 상품을 등록하려고 하는 회원의 이름과 비밀번호가 같은지 검증
+        if (!isValidExistUser(findUser, dto.getWriter(), dto.getPassword())) {
+            throw new IllegalArgumentException("등록된 회원의 정보와 작성자의 정보가 다릅니다.");
+        }
 
         SalesItemEntity entity = SalesItemEntity
                 .builder()
@@ -176,5 +186,11 @@ public class SalesItemServiceImpl implements SalesItemService, CommonSalesItemSe
         Page<SalesItemEntity> itemPage = salesItemRepository.findAll(pageable);
 
         return itemPage.map(ItemPageResponseDto::pageResponse);
+    }
+
+    // 등록된 회원과 물품을 등록하려고 하는 사용자 검증 메소드
+    private boolean isValidExistUser(UserEntity entity, String writer, String password) {
+        return entity.getUserId().equals(writer) &&
+                passwordEncoder.matches(password, entity.getPassword()); // .matches(입력받은 비교할 비밀번호, 이미 암호화된 비밀번호)
     }
 }
