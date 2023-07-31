@@ -29,10 +29,14 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public ResponseDto register(RegisterRequest request) {
+        String password = request.getPassword();
+        String passwordCheck = request.getPasswordCheck();
+
+        validatePassword(password, passwordCheck); // 비밀 번호 검증
 
         UserEntity user = UserEntity.builder()
                 .userId(request.getUserId())
-                .password(passwordEncoder.encode(request.getPassword()))
+                .password(passwordEncoder.encode(password))
                 .phoneNumber(request.getPhoneNumber())
                 .email(request.getEmail())
                 .address(new Address(request.getCity(), request.getCountry()))
@@ -47,6 +51,7 @@ public class UserServiceImpl implements UserService {
         ResponseDto responseDto = new ResponseDto();
         responseDto.setMessage("회원가입이 완료되었습니다.");
         return responseDto;
+
     }
 
     // 로그인 메소드
@@ -68,4 +73,12 @@ public class UserServiceImpl implements UserService {
                 .token(jwt)
                 .build();
     }
+
+    // 비밀번호와 비밀번호 체크 검증 메소드
+    private static void validatePassword(String password, String passwordCheck) {
+        if (!password.equals(passwordCheck)) {
+            throw new IllegalArgumentException("password와 passwordCheck가 일치하지 않습니다.");
+        }
+    }
+
 }
