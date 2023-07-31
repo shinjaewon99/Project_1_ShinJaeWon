@@ -37,6 +37,8 @@ public class WebSecurityConfig {
                 .permitAll()
                 .requestMatchers(HttpMethod.GET, "items/**")
                 .permitAll()
+                .requestMatchers("login-form", "register-form")
+                .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
