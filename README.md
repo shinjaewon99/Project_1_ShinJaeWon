@@ -1,6 +1,6 @@
 #### 기존 https://github.com/likelion-backend-5th/MiniProject_Basic_ShinJaeWon 에서 고도화 작업 진행
 -----
-🦁 멋쟁이사자처럼 Mini_Project 고도화
+## 🦁 멋쟁이사자처럼 Mini_Project 고도화
 
 ➡ 작성자 : 신재원
 
@@ -28,26 +28,6 @@
 ## ▶ DB ERD
 ![1](https://github.com/likelion-backend-5th/Project_1_ShinJaeWon/assets/95893341/47f2ca56-1cef-46ed-9450-8dac72daac30)
 
-양방향 매핑 관계
-
-✔ `USER - ITEM : 1 : N 관계 / ITEM - USER : N : 1 관계`
-
-![2](https://github.com/likelion-backend-5th/Project_1_ShinJaeWon/assets/95893341/912619c4-df70-4568-96ef-add149628b57)
-
-![5](https://github.com/likelion-backend-5th/Project_1_ShinJaeWon/assets/95893341/c0125bb5-823b-4e45-8c88-3c68033d184d)
-
-
-✔ `ITEM - COMMENT : 1 : N 관계 / COMMENT - ITEM : N : 1 관계`
-
-![3](https://github.com/likelion-backend-5th/Project_1_ShinJaeWon/assets/95893341/7a52348b-82ac-4d60-8635-3b722b61340a)
-
-![6](https://github.com/likelion-backend-5th/Project_1_ShinJaeWon/assets/95893341/284367ec-d6d8-4503-af27-95f2b425acb3)
-
-✔ `ITEM - NEGOTIATION : 1 : N 관계 / NEGOTIATION - ITEM : N : 1 관계`
-
-![4](https://github.com/likelion-backend-5th/Project_1_ShinJaeWon/assets/95893341/91bedf17-1d71-4417-b365-3363c58e1e9f)
-
-![7](https://github.com/likelion-backend-5th/Project_1_ShinJaeWon/assets/95893341/20c89864-c8bc-4c15-83ed-8839b56c6ebf)
 
 
 ----
@@ -122,30 +102,40 @@
 </details>
 
 -----
+양방향 매핑 관계
 
-`POST /user/{userId}/items` : 로그인 하여 발행된 jwt 을 사용하여 인증된 회원의 물품 등록
+### UserEntity와 ItemEntity의 관계
+✔ `USER - ITEM : 1 : N 관계` 
 
-추가 EndPoint
+![2](https://github.com/likelion-backend-5th/Project_1_ShinJaeWon/assets/95893341/912619c4-df70-4568-96ef-add149628b57)
 
-#### 🔎 사용자 - 물품  API 명세서  https://documenter.getpostman.com/view/22851675/2s9XxtxFMB
+✔ ` ITEM - USER : N : 1 관계`
 
-----
+![5](https://github.com/likelion-backend-5th/Project_1_ShinJaeWon/assets/95893341/c0125bb5-823b-4e45-8c88-3c68033d184d)
 
-`POST /user/{userId}/items/{itemId}/comments` : 로그인 하여 발행된 jwt 을 사용하여 인증된 회원의 물품의 댓글 등록
 
-추가 EndPoint
+### ItemEntity와 CommentEntity의 관계
 
-#### 🔎 사용자 - 물품 - 물품의 댓글 API 명세서 https://documenter.getpostman.com/view/22851675/2s9XxtxFMC 
+✔ `ITEM - COMMENT : 1 : N 관계`  
 
-----
+![3](https://github.com/likelion-backend-5th/Project_1_ShinJaeWon/assets/95893341/7a52348b-82ac-4d60-8635-3b722b61340a)
 
-`POST /user/{userId}/items/{itemId}/proposals` : 로그인 하여 발행된 jwt 을 사용하여 인증된 회원의 물품의 구메제안 등록
+✔ `COMMENT - ITEM : N : 1 관계`
 
-추가 EndPoint
+![6](https://github.com/likelion-backend-5th/Project_1_ShinJaeWon/assets/95893341/284367ec-d6d8-4503-af27-95f2b425acb3)
 
-#### 🔎 사용자 - 물품 - 물품의 구매제안 API 명세서 https://documenter.getpostman.com/view/22851675/2s9XxtxFMD 
+### ItemEntity와 NegotiationEntity의 관계
 
------
+✔ `ITEM - NEGOTIATION : 1 : N 관계` 
+
+![4](https://github.com/likelion-backend-5th/Project_1_ShinJaeWon/assets/95893341/91bedf17-1d71-4417-b365-3363c58e1e9f)
+
+✔ `NEGOTIATION - ITEM : N : 1 관계`
+
+![7](https://github.com/likelion-backend-5th/Project_1_ShinJaeWon/assets/95893341/20c89864-c8bc-4c15-83ed-8839b56c6ebf)
+
+------
+
 
 ### 3️⃣ 기능 접근 설정 하기 
 🛠 개발 기간 : 7.28 ~ 7.29 
@@ -179,6 +169,34 @@
 </details>
 
 #### ➡ 사용자의 인증없이 사용할수 있는 기능 API https://documenter.getpostman.com/view/22851675/2s9XxtxFME
+
+#### ➡ 회원가입, 로그인을 거쳐 발급된 jwt 으로 인증이 필요한 기능 API
+
+
+`/user/{userId}/items` : 로그인 하여 발행된 jwt 을 사용하여 인증된 회원의 물품 서비스
+
+추가 EndPoint
+
+#### 🔎 사용자 - 물품  API 명세서  https://documenter.getpostman.com/view/22851675/2s9XxtxFMB
+
+----
+
+`/user/{userId}/items/{itemId}/comments` : 로그인 하여 발행된 jwt 을 사용하여 인증된 회원의 물품의 댓글 서비스
+
+추가 EndPoint
+
+#### 🔎 사용자 - 물품 - 물품의 댓글 API 명세서 https://documenter.getpostman.com/view/22851675/2s9XxtxFMC 
+
+----
+
+`/user/{userId}/items/{itemId}/proposals` : 로그인 하여 발행된 jwt 을 사용하여 인증된 회원의 물품의 구메제안 서비스
+
+추가 EndPoint
+
+#### 🔎 사용자 - 물품 - 물품의 구매제안 API 명세서 https://documenter.getpostman.com/view/22851675/2s9XxtxFMD 
+
+-----
+
 
 
 ## 📚 배운점
