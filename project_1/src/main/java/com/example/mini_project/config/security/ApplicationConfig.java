@@ -1,4 +1,4 @@
-package com.example.mini_project.config;
+package com.example.mini_project.config.security;
 
 import com.example.mini_project.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

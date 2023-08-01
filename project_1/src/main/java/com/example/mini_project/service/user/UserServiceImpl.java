@@ -1,7 +1,7 @@
 package com.example.mini_project.service.user;
 
 import com.example.mini_project.auth.AuthenticationResponse;
-import com.example.mini_project.config.JwtService;
+import com.example.mini_project.config.security.JwtService;
 import com.example.mini_project.dto.ResponseDto;
 import com.example.mini_project.dto.user.Request.LoginRequestDto;
 import com.example.mini_project.dto.user.Request.RegisterRequest;

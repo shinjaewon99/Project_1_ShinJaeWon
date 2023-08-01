@@ -1,6 +1,6 @@
 package com.example.mini_project.util.jwt;
 
-import com.example.mini_project.config.JwtService;
+import com.example.mini_project.config.security.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

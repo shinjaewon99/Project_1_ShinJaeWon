@@ -1,4 +1,4 @@
-package com.example.mini_project.config;
+package com.example.mini_project.config.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
